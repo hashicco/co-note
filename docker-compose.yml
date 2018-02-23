@@ -1,0 +1,48 @@
+version: '2'
+services:
+  rails:
+    container_name: conote_rails
+    image: conote/dev/rails
+    build:
+      context: ./
+      dockerfile: ./docker/development/rails/Dockerfile
+      args:
+        APP_ROOT: /var/rails
+        FILES: ./docker/development/rails/
+    env_file: .env
+    expose:
+      - '3000'
+    volumes:
+      - rails_sync:/var/rails:nocopy
+    links:
+      - mysql
+  mysql:
+    container_name: conote_mysql
+    image: conote/dev/mysql
+    build:
+      context: ./docker/development/mysql
+    command: |
+      mysqld --character-set-server=utf8mb4
+             --collation-server=utf8mb4_unicode_ci
+             --innodb-buffer-pool-size=1G
+             --sort_buffer_size=32M
+             --log-error=/var/log/mysql/error.log
+             --general-log=true
+             --general-log-file=/var/log/mysql/general.log
+             --slow_query_log=true
+             --slow_query_log_file=/var/log/mysql/slow_query.log
+             --sql-mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+    env_file: .env
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  rails_sync:
+    external: true
+  mysql_data:
+    driver: local
+
