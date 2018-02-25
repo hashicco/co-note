@@ -1,0 +1,2 @@
+class NoteUpdate < ApplicationRecord
+end

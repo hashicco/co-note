@@ -1,0 +1,2 @@
+class NoteDisclosure < ApplicationRecord
+end
