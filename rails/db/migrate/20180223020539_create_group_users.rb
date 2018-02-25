@@ -5,5 +5,7 @@ class CreateGroupUsers < ActiveRecord::Migration[5.1]
       t.integer :user_id, index: true, null: false
       t.timestamps
     end
+
+    add_index :group_users, [:group_id, :user_id], unique: true
   end
 end

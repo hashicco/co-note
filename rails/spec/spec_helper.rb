@@ -13,14 +13,19 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+require 'factory_bot'
+
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+
   config.before(:suite) do
-    DatabaseRewinder.clean_all
-    SeedFu.seed
+    DatabaseRewinder.clean_all multiple: false
+    # SeedFu.seed
   end
 
   config.after(:each) do
-    DatabaseRewinder.clean
+    DatabaseRewinder.clean multiple: false
   end
 
   # rspec-expectations config goes here. You can use an alternate

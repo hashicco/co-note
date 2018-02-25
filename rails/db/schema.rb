@@ -13,35 +13,56 @@
 ActiveRecord::Schema.define(version: 20180223020539) do
 
   create_table "group_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["group_id", "user_id"], name: "index_group_users_on_group_id_and_user_id", unique: true
+    t.index ["group_id"], name: "index_group_users_on_group_id"
+    t.index ["user_id"], name: "index_group_users_on_user_id"
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "owner_user_id", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["owner_user_id"], name: "index_groups_on_owner_user_id"
   end
 
   create_table "note_disclosures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "note_id", null: false
+    t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_note_disclosures_on_group_id"
+    t.index ["note_id"], name: "index_note_disclosures_on_note_id"
   end
 
   create_table "note_updates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "note_id", null: false
+    t.text "text", null: false
+    t.string "status", default: "WAITING", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["note_id"], name: "index_note_updates_on_note_id"
   end
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "owner_user_id", null: false
+    t.text "text"
+    t.boolean "disclosed_to_public", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["owner_user_id"], name: "index_notes_on_owner_user_id"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "name"
-    t.string "email"
+    t.string "name", null: false
+    t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
 end
