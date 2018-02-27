@@ -2,6 +2,12 @@ class Group < ApplicationRecord
   belongs_to :owner, foreign_key: :owner_user_id, class_name: "User"
   has_many :group_users
   has_many :including_users, through: :group_users, source: :user
+  has_many :disclosures, class_name: "NoteDisclosure"
+  has_many :disclosed_notes, through: :disclosures, source: :note
+
+  scope :including_user, ->(user){
+    joins(:group_users).where(:group_users => {user_id: user.id} )
+  }
 
   def owned_by?(user)
     owner == user

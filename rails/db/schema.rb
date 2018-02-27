@@ -50,7 +50,8 @@ ActiveRecord::Schema.define(version: 20180223020539) do
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "owner_user_id", null: false
-    t.text "text"
+    t.string "title", null: false
+    t.text "text", null: false
     t.boolean "disclosed_to_public", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

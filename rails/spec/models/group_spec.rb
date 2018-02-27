@@ -1,20 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
-  let!(:user01){ create(:user, name: "User01", email: "user01@example.com") }
-  let!(:user02){ create(:user, name: "User02", email: "user02@example.com") }
-  let!(:user03){ create(:user, name: "User03", email: "user03@example.com") }
-  let!(:user04){ create(:user, name: "User04", email: "user04@example.com") }
-  let!(:user05){ create(:user, name: "User05", email: "user05@example.com") }
-  let!(:user06){ create(:user, name: "User06", email: "user06@example.com") }
-  let!(:user07){ create(:user, name: "User07", email: "user07@example.com") }
+  let!(:user01){ create(:user) }
+  let!(:user02){ create(:user) }
+  let!(:user03){ create(:user) }
+  let!(:user04){ create(:user) }
+  let!(:user05){ create(:user) }
+  let!(:user06){ create(:user) }
+  let!(:user07){ create(:user) }
 
-  let!(:group01){ create(:group, :with_including_users, name: "Group01 of User01", owner: user01, users: [user05, user06, user07] ) }
-  let!(:group02){ create(:group, :with_including_users, name: "Group02 of User01", owner: user01, users: [user06]) }
-  let!(:group03){ create(:group, :with_including_users, name: "Group03 of User01", owner: user01, users: [user07]) }
-  let!(:group04){ create(:group, :with_including_users, name: "Group04 of User02", owner: user02, users: [user05, user06]) }
-  let!(:group05){ create(:group, :with_including_users, name: "Group05 of User02", owner: user02, users: []) }
-  let!(:group06){ create(:group, :with_including_users, name: "Group06 of User03", owner: user03, users: [user05, user07]) }
+  let!(:group01){ create(:group, :with_including_users, owner: user01, users: [user05, user06, user07] ) }
+  let!(:group02){ create(:group, :with_including_users, owner: user01, users: [user06]) }
+  let!(:group03){ create(:group, :with_including_users, owner: user01, users: [user07]) }
+  let!(:group04){ create(:group, :with_including_users, owner: user02, users: [user05, user06]) }
+  let!(:group05){ create(:group, :with_including_users, owner: user02, users: []) }
+  let!(:group06){ create(:group, :with_including_users, owner: user03, users: [user05, user07]) }
+
+  let!(:note01){ create(:note, :with_disclosed_groups, owner: user01, groups: [group01, group02]) }
+  let!(:note02){ create(:note, :with_disclosed_groups, owner: user02, groups: [group04]) }
+  let!(:note03){ create(:note, :with_disclosed_groups, owner: user03, groups: [group06]) }
+  let!(:note04){ create(:note, :with_disclosed_groups, owner: user04, groups: []) }
+  let!(:note05){ create(:note, :with_disclosed_groups, owner: user05, groups: [], disclosed_to_public: true) }
 
   describe "#owner" do
     it "参照できる" do
@@ -44,6 +50,13 @@ RSpec.describe Group, type: :model do
         expect(group02.including_users).to contain_exactly(user06)
         expect(group03.including_users).to contain_exactly(user07)
       end
+    end
+  end
+
+  describe "scope including_user" do
+    it do
+      expect( Group::including_user( user05 ) ).to contain_exactly(group01, group04, group06)
+      expect( Group::including_user( user06 ) ).to contain_exactly(group01, group02, group04)
     end
   end
 
@@ -98,6 +111,12 @@ RSpec.describe Group, type: :model do
           group02.remove_user user07
         ).to eq(false)
       end
+    end
+  end
+
+  describe "#desclosed_notes" do
+    it "参照できる" do
+
     end
   end
 end

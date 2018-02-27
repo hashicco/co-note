@@ -1,2 +1,0 @@
-class NoteUpdate < ApplicationRecord
-end
