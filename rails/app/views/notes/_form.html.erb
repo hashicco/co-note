@@ -3,6 +3,5 @@
   <%= f.input :text, as: :text, input_html: {rows: 15, "data-provide": "markdown"} %>
 
   <%= link_to "back", notes_path, class: "btn"%>
-
-  <%= f.submit class: "btn btn_primary"%>
+  <%= f.submit class: ["btn", "btn-primary"] %>
 <% end %>
