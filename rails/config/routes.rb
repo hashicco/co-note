@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   resources :groupss
 
   resources :users, :except => [:index]
-  resources :user_sessions, :only => [:new, :create, :destroy]
-  get 'login' => 'user_sessions#new', :as => :login
-  post 'logout' => 'user_sessions#destroy', :as => :logout
+  resources :password_auths, :only => [:new, :create, :destroy]
+  get 'login' => 'password_auths#new', :as => :login
+  post 'logout' => 'password_auths#destroy', :as => :logout
 
   post "oauth/callback" => "oauths#callback"
   get "oauth/callback" => "oauths#callback"
