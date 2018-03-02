@@ -1,17 +1,10 @@
-<%= form_with(model: group, local: true) do |form| %>
-  <% if group.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(group.errors.count, "error") %> prohibited this group from being saved:</h2>
+<%= simple_form_for  _group do |f| %>
+  <%= f.input :name %>
 
-      <ul>
-      <% group.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+  <%= f.simple_fields_for :group_users do |u| %>
+    <%= u.input :user_id, collection: User.all %>
   <% end %>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <%= link_to "back", groups_path, class: "btn"%>
+  <%= f.submit class: ["btn", "btn-primary"] %>
 <% end %>

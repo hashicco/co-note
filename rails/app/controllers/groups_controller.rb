@@ -4,7 +4,8 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all
+    @groups = Group.owned_by(current_user)
+                   .order(:name)
   end
 
   # GET /groups/1
@@ -15,17 +16,23 @@ class GroupsController < ApplicationController
   # GET /groups/new
   def new
     @group = Group.new
-  end
+    @group.rest_users_size.times do
+      @group.group_users.build
+    end
+   end
 
   # GET /groups/1/edit
   def edit
+    @group.rest_users_size.times do
+      @group.group_users.build
+    end
   end
 
   # POST /groups
   # POST /groups.json
   def create
     @group = Group.new(group_params)
-
+    @group.owner = current_user
     respond_to do |format|
       if @group.save
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
@@ -69,6 +76,10 @@ class GroupsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def group_params
-      params.fetch(:group, {})
+      _group_params = params.require(:group).permit(:name, group_users_attributes: [:id, :user_id])
+      _group_params["group_users_attributes"].each do | k, v |
+        v["_destroy"] = true if v["user_id"].blank?
+      end
+      _group_params
     end
 end
