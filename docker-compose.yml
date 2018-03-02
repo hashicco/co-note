@@ -10,8 +10,8 @@ services:
         APP_ROOT: /var/rails
         FILES: ./docker/development/rails/
     env_file: .env
-    expose:
-      - '3000'
+    ports:
+      - '3000:3000'
     volumes:
       - rails_sync:/var/rails:nocopy
     links:
