@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CoNote</title>
+    <title>co-Note</title>
     <%= csrf_meta_tags %>
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css">
+    <%= stylesheet_link_tag 'application', media: 'all' %>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/js/bootstrap-markdown.min.js"></script>
     <%= javascript_include_tag 'application' %>
   </head>
 
   <body>
-    <div id="nav">
-      <% if current_user %>
-        <%= link_to "Edit Profile", edit_user_path(current_user.id) %>
-        <%= link_to "Logout", :logout, method: :post %>
-      <% else %>
-        <%= link_to "Register", new_user_path %> |
-        <%= link_to "Login", :login %>
-      <% end %>
+    <%= render "shared/navbar" %>
+    
+    <div class="container">
+      <%= render "shared/messages" %>
+      <%= yield %>
     </div>
-    <div>
-      <p id="notice"><%= flash[:notice] %></p>
-      <p id="alert"><%= flash[:alert] %></p>
-    </div>
-    <%= yield %>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">This is co-Note. The note sharing service.</p>
+      </div>
+    </footer>
+
+    
   </body>
 </html>

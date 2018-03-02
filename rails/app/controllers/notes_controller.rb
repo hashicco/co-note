@@ -4,7 +4,8 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    @notes = Note.disclosed_to_or_owned_by(current_user)
+                 .order(:updated_at)
   end
 
   # GET /notes/1
@@ -25,6 +26,7 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = Note.new(note_params)
+    @note.owner = current_user
 
     respond_to do |format|
       if @note.save
@@ -69,6 +71,6 @@ class NotesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def note_params
-      params.fetch(:note, {})
+      params.require(:note).permit(:title, :text)
     end
 end

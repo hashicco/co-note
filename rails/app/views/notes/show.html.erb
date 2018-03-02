@@ -1,4 +1,11 @@
-<p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_note_path(@note) %> |
-<%= link_to 'Back', notes_path %>
+<div class="page-header">
+  <h1><%= @note.title %></h1>
+</div>
+
+<div>
+  <%== Kramdown::Document.new(@note.text).to_html %>
+</div>
+
+<%= link_to 'Back', notes_path, class: "btn btn-default"%>
+<%= link_to 'Edit', edit_note_path(@note), class: "btn btn-info" %>
