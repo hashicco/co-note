@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
+  before_action :set_note, only: [:show, :edit, :update, :destroy, :edit_disclosures, :update_disclosures]
 
   # GET /notes
   # GET /notes.json
@@ -63,6 +63,25 @@ class NotesController < ApplicationController
     end
   end
 
+  def edit_disclosures
+    @note.rest_disclosures_size.times do
+      @note.disclosures.build
+    end
+  end
+
+  def update_disclosures
+    respond_to do |format|
+      if @note.update(note_disclosures_params)
+        format.html { redirect_to @note, notice: 'Disclosures was successfully updated.' }
+        format.json { render :show, status: :ok, location: @note }
+      else
+        format.html { render :edit }
+        format.json { render json: @note.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note
@@ -73,4 +92,14 @@ class NotesController < ApplicationController
     def note_params
       params.require(:note).permit(:title, :text)
     end
+
+    def note_disclosures_params
+      _note_params = params.require(:note).permit(disclosures_attributes: [:id, :group_id])
+      _note_params["disclosures_attributes"].each do | k, v |
+        v["_destroy"] = true if v["group_id"].blank?
+      end
+      _note_params
+
+    end
+
 end

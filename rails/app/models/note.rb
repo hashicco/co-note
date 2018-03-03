@@ -2,6 +2,7 @@ class Note < ApplicationRecord
   belongs_to :owner, foreign_key: :owner_user_id, class_name: "User"
   has_many :disclosures, class_name: "NoteDisclosure"
   has_many :disclosed_groups, through: :disclosures, source: :group
+  accepts_nested_attributes_for :disclosures, reject_if: ->(attrs){ attrs['group_id'].blank? }, allow_destroy: true
 
   scope :disclosed_to_or_owned_by, ->(user){
     eager_load(:disclosed_groups => {:group_users => :user}).where( 
@@ -77,6 +78,10 @@ class Note < ApplicationRecord
 
   def disclosed_to_group?(group)
     disclosure_of(group).present?
+  end
+
+  def rest_disclosures_size
+    3 - disclosures.size
   end
 
 end

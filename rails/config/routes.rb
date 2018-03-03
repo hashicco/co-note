@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  resources :notes
+  resources :notes do
+    member do
+      get   'disclosures'       => "notes#show_disclosures"
+      get   'disclosures/edit'  => "notes#edit_disclosures"
+      patch 'disclosures'       => "notes#update_disclosures"
+    end
+  end
   resources :groups
 
   resources :users, :except => [:index, :show]
