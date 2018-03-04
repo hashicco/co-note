@@ -12,12 +12,9 @@ Rails.application.routes.draw do
 
   resources :users, :except => [:index, :show]
   resources :password_auths, :only => [:new, :create, :destroy]
+  
   get 'login' => 'password_auths#new', :as => :login
   post 'logout' => 'password_auths#destroy', :as => :logout
-
-  post "oauth/callback" => "oauths#callback"
-  get "oauth/callback" => "oauths#callback"
-  get "oauth/:provider" => "oauths#oauth", :as => :auth_at_provider
 
   root :to => 'notes#index'
 end
