@@ -8,9 +8,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new user_params
     if @user.save
-      redirect_to(:root, notice: 'User was successfully created')
+      redirect_to(login_path, notice: 'User was successfully created')
     else
-      binding.pry
       flash.now[:alert] = "Some errors occured"
       render :new
     end
@@ -25,13 +24,10 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to(:root, notice: 'User was successfully updated')
     else
-      binding.pry
       flash.now[:alert] = "Some errors occured"
       render :new
     end
   end
-
-
 
   # ...
   private
