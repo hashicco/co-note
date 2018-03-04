@@ -3,7 +3,7 @@
   <h1><%= @note.title %></h1>
 </div>
 
-<div>
+<div class="content-text">
   <%== Kramdown::Document.new(@note.text).to_html %>
 </div>
 
