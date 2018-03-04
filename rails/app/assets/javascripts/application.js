@@ -12,3 +12,5 @@
 //
 //= require rails-ujs
 //= require_tree .
+
+$("textarea.markdown-edit").markdown({hiddenButtons: "Preview"});
