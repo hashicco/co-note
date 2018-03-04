@@ -1,0 +1,11 @@
+version: '2'
+services:
+  rails:
+    image: registry.heroku.com/co-note/web
+    build:
+      context: ./
+      dockerfile: ./docker/production/rails/Dockerfile
+      args:
+        APP_ROOT: /var/rails
+        FILES: ./docker/production/rails/
+
