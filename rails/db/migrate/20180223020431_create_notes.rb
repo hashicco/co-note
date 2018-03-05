@@ -4,8 +4,6 @@ class CreateNotes < ActiveRecord::Migration[5.1]
       t.integer :owner_user_id, index: true, null: false
       t.string :title, null: false
       t.text :text, null: false
-      t.boolean :disclosed_to_public, null: false, default: false
-
       t.timestamps
     end
   end

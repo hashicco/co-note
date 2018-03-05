@@ -18,50 +18,11 @@ class Note < ApplicationRecord
     owner == user
   end
 
-  def disclose_to_public!
-    raise if disclosed_to_public?
-    update! disclosed_to_public: true   
-  end
-
-  def close_from_public!
-    raise unless disclosed_to_public?
-    update! disclosed_to_public: false   
-  end
-
   def disclosure_of(group)
     disclosures.find_by(group: group)
   end
 
-  def disclose_to!(group)
-    raise unless group.owned_by? owner
-    existed_disclosure = disclosure_of(group)
-    raise if existed_disclosure
-    disclosures.create!(group: group)
-  end
-
-  def disclose_to(group)
-    disclose_to!(group)
-    true
-  rescue => e
-    return false
-  end
-
-  def enclose_from!(group)
-    existed_disclosure = disclosure_of(group)
-    raise unless existed_disclosure
-    existed_disclosure.destroy!
-  end
-
-  def enclose_from(group)
-    enclose_from!(group)
-    true
-  rescue => e
-    return false
-  end
-
   def disclosed_to?(user_or_group)
-    return true if disclosed_to_public?
-
     case user_or_group
     when User
       disclosed_to_user?(user_or_group)

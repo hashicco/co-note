@@ -20,7 +20,7 @@ RSpec.describe Group, type: :model do
   let!(:note02){ create(:note, :with_disclosed_groups, owner: user02, groups: [group04]) }
   let!(:note03){ create(:note, :with_disclosed_groups, owner: user03, groups: [group06]) }
   let!(:note04){ create(:note, :with_disclosed_groups, owner: user04, groups: []) }
-  let!(:note05){ create(:note, :with_disclosed_groups, owner: user05, groups: [], disclosed_to_public: true) }
+  let!(:note05){ create(:note, :with_disclosed_groups, owner: user05, groups: []) }
 
   describe "#owner" do
     it "参照できる" do
@@ -60,63 +60,4 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe "#add_user" do
-    context "正常系" do
-      it "追加できる" do
-        expect{ 
-          group01.add_user! user02
-        }.to change{ group01.including_users.count }.by(1)
-      end
-    end
-
-    context "異常系" do
-      it "既にいるユーザは追加できない" do
-        expect{
-          group01.add_user! user05
-        }.to raise_error( ActiveRecord::RecordInvalid )
-        expect(
-          group01.add_user user05
-        ).to eq(false)
-      end
-
-      it "ownerは追加できない" do
-        expect{
-          group01.add_user! user01
-        }.to raise_error( ActiveRecord::RecordInvalid )
-        expect(
-          group01.add_user user01
-        ).to eq(false)
-      end
-    end
-  end
-
-  describe "#remove_user" do
-    context "正常系" do
-      it "削除できる" do
-        expect{
-          group01.remove_user! user05
-        }.to change{ group01.including_users.count }.by(-1)
-        expect{
-          group01.remove_user user06
-        }.to change{ group01.including_users.count }.by(-1)
-      end
-    end
-
-    context "異常系" do
-      it "含まれていないユーザは削除できない" do
-        expect{
-          group02.remove_user! user07
-        }.to raise_error(ActiveRecord::RecordNotFound)
-        expect(
-          group02.remove_user user07
-        ).to eq(false)
-      end
-    end
-  end
-
-  describe "#desclosed_notes" do
-    it "参照できる" do
-
-    end
-  end
 end
