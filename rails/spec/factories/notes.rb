@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :note do
     title "hoge"
     text "hogehoge\nhogehoge\nhogehoge"
-    disclosed_to_public false
 
     trait :with_disclosed_groups do
       transient do

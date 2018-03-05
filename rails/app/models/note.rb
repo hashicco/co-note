@@ -6,10 +6,8 @@ class Note < ApplicationRecord
 
   scope :disclosed_to_or_owned_by, ->(user){
     eager_load(:disclosed_groups => {:group_users => :user}).where( 
-      arel_table[:disclosed_to_public].eq(true).or(
-        arel_table[:owner_user_id].eq( user.id ).or(
-          GroupUser.arel_table[:user_id].eq( user.id)
-        )
+      arel_table[:owner_user_id].eq( user.id ).or(
+        GroupUser.arel_table[:user_id].eq( user.id)
       )
     ).distinct
   }
