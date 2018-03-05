@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20180228101434) do
     t.integer "owner_user_id", null: false
     t.string "title", null: false
     t.text "text", null: false
-    t.boolean "disclosed_to_public", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_user_id"], name: "index_notes_on_owner_user_id"
