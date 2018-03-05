@@ -13,6 +13,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
+      # - ./rails:/var/rails
       - rails_sync:/var/rails:nocopy
     links:
       - mysql
