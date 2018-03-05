@@ -1,5 +1,7 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
+  before_action :check_permission_for_read, only: [:show]
+  before_action :check_permission_for_write, only: [:edit, :update, :destroy]
 
   # GET /groups
   # GET /groups.json
@@ -16,6 +18,7 @@ class GroupsController < ApplicationController
   # GET /groups/new
   def new
     @group = Group.new
+    @group.owner = current_user
     @group.rest_users_size.times do
       @group.group_users.build
     end
@@ -72,6 +75,20 @@ class GroupsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_group
       @group = Group.find(params[:id])
+    end
+
+    def check_permission_for_read
+      unless @group.owned_by?(current_user)
+        redirect_to groups_path, alert: 'You cannot read this group.' 
+        return
+      end
+    end
+
+    def check_permission_for_write
+      unless @group.owned_by?(current_user)
+        redirect_to groups_path, alert: 'You cannot write this group.' 
+        return
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

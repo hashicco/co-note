@@ -1,5 +1,7 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy, :edit_disclosures, :update_disclosures]
+  before_action :check_permission_for_read, only: [:show]
+  before_action :check_permission_for_write, only: [:edit, :update, :destroy, :edit_disclosures, :update_disclosures]
 
   # GET /notes
   # GET /notes.json
@@ -11,6 +13,7 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
+
   end
 
   # GET /notes/new
@@ -86,6 +89,20 @@ class NotesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_note
       @note = Note.find(params[:id])
+    end
+
+    def check_permission_for_read
+      unless @note.disclosed_to?(current_user) || @note.owned_by?(current_user)
+        redirect_to notes_path, alert: 'You cannot read this note.' 
+        return
+      end
+    end
+
+    def check_permission_for_write
+      unless @note.owned_by?(current_user)
+        redirect_to notes_path, alert: 'You cannot write this note.' 
+        return
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
