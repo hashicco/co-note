@@ -1,114 +1,143 @@
 require 'rails_helper'
 
-RSpec.describe GroupsController, type: :controller do
-  let!(:user01){ create(:user) }
-  let!(:user02){ create(:user) }
-  let!(:user03){ create(:user) }
+require_relative '../init_data_context'
+require_relative './contexts'
 
+RSpec.describe GroupsController, type: :controller, init_data: true do
+  let(:user04){ create(:user) }
+  let(:user05){ create(:user) }
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  let(:valid_session) { {} }
-
-  describe "GET #index" do
-    it "returns a success response" do
-      group = Group.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(response).to be_success
-    end
-  end
-
-  describe "GET #show" do
-    it "returns a success response" do
-      group = Group.create! valid_attributes
-      get :show, params: {id: group.to_param}, session: valid_session
-      expect(response).to be_success
-    end
-  end
-
-  describe "GET #new" do
-    it "returns a success response" do
-      get :new, params: {}, session: valid_session
-      expect(response).to be_success
-    end
-  end
-
-  describe "GET #edit" do
-    it "returns a success response" do
-      group = Group.create! valid_attributes
-      get :edit, params: {id: group.to_param}, session: valid_session
-      expect(response).to be_success
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Group" do
-        expect {
-          post :create, params: {group: valid_attributes}, session: valid_session
-        }.to change(Group, :count).by(1)
-      end
-
-      it "redirects to the created group" do
-        post :create, params: {group: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Group.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {group: invalid_attributes}, session: valid_session
-        expect(response).to be_success
-      end
-    end
-  end
-
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+    { "name": "hogehoge", 
+      "group_users_attributes": {
+        "0"=>{"user_id"=>user04.id}, 
+        "1"=>{"user_id"=>user05.id}, 
+        "2"=>{"user_id"=>""}
       }
+    }
+  }
 
-      it "updates the requested group" do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: new_attributes}, session: valid_session
-        group.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the group" do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(group)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: invalid_attributes}, session: valid_session
-        expect(response).to be_success
-      end
+  describe "GET #index", login: false do
+    it do
+      get :index
+      expect(response).to redirect_to(:login)
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested group" do
-      group = Group.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: group.to_param}, session: valid_session
-      }.to change(Group, :count).by(-1)
+  describe "GET #index", login: :user01 do
+    it do
+      get :index
+      expect(response).to be_success
+    end
+  end
+
+  describe "GET #show", login: false do
+    it do
+      get :show, params: {id: group01.to_param}
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "GET #show", login: :user01 do
+    it do
+      get :show, params: {id: group01.to_param}
+      expect(response).to be_success
     end
 
-    it "redirects to the groups list" do
-      group = Group.create! valid_attributes
-      delete :destroy, params: {id: group.to_param}, session: valid_session
-      expect(response).to redirect_to(groups_url)
+    it do
+      get :show, params: {id: group03.to_param}
+      expect(response).to redirect_to(:groups)
+    end
+  end
+
+  describe "GET #new", login: false do
+    it do
+      get :new
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "GET #new", login: :user01 do
+    it do
+      get :new
+      expect(response).to be_success
+    end
+  end
+
+  describe "GET #edit", login: false do
+    it do
+      get :edit, params: {id: group01.to_param}
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "GET #edit", login: :user01 do
+    it do
+      get :edit, params: {id: group01.to_param}
+      expect(response).to be_success
+    end
+    it do
+      get :edit, params: {id: group03.to_param}
+      expect(response).to redirect_to(:groups)
+    end
+  end
+
+  describe "POST #create", login: false do
+    it do
+      post :create, params: {group: valid_attributes}
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "POST #create", login: :user01 do
+    it do
+      expect {
+        post :create, params: {group: valid_attributes}
+      }.to change(Group, :count).by(1)
+    end
+    it do
+      post :create, params: {group: valid_attributes}
+      expect(response).to redirect_to( Group.last )
+    end
+  end
+
+  describe "PUT #update", login: false do
+    it do
+      put :update, params: {id: group01.to_param, group: valid_attributes}
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "PUT #update", login: :user01 do
+    it do
+      put :update, params: {id: group01.to_param, group: valid_attributes}
+      expect{ group01.reload }.to change{ group01.name }.from("GroupHogeHoge").to("hogehoge")
+      expect(response).to redirect_to( group01 )
+    end
+
+    it do
+      put :update, params: {id: group03.to_param, group: valid_attributes}
+      expect(response).to redirect_to(:groups)
+    end
+  end
+
+  describe "DELETE #destroy", login: false do
+    it do
+      delete :destroy, params: {id: group01.to_param}
+      expect(response).to redirect_to(:login)
+    end
+  end
+
+  describe "DELETE #destroy", login: :user01 do
+    it do
+      expect {
+        delete :destroy, params: {id: group01.to_param}
+      }.to change(Group, :count).by(-1)
+      expect(response).to redirect_to(:groups)
+    end
+
+    it do
+      delete :destroy, params: {id: group03.to_param}
+      expect(response).to redirect_to(:groups)
     end
   end
 

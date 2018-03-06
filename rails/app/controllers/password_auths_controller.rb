@@ -2,6 +2,7 @@ class PasswordAuthsController < ApplicationController
   skip_before_action :require_login, except: [:destroy]
   
   def new
+    redirect_to :root if current_user
     @password_auth = PasswordAuth.new
   end
 

@@ -1,25 +1,43 @@
 require 'rails_helper'
 
-RSpec.describe PasswordAuthsController, type: :controller do
+require_relative '../init_data_context'
+require_relative './contexts'
 
-  describe "GET #new" do
-    it "returns http success" do
+RSpec.describe PasswordAuthsController, type: :controller, init_data: true do
+  let(:valid_attributes) {
+    { "email": "hogehoge@example.com", 
+      "password": "password"}
+  }
+
+  describe "GET #new", login: false do
+    it do
       get :new
-      expect(response).to have_http_status(:success)
+      expect(response).to be_success
     end
   end
 
-  describe "GET #create" do
-    it "returns http success" do
-      get :create
-      expect(response).to have_http_status(:success)
+  describe "GET #new", login: :user01 do
+    it do
+      get :new
+      expect(response).to redirect_to(:root)
+    end
+  end
+
+  describe "GET #create", login: false do
+    let(:user04){ create :user, name: "hogehoge", 
+                                email: "hogehoge@example.com", 
+                                password: "password", 
+                                password_confirmation: "password" }
+    it do
+      get :create, params: {password_auth: valid_attributes}
+      expect(response).to be_success
     end
   end
 
   describe "GET #destroy" do
-    it "returns http success" do
+    it do
       get :destroy
-      expect(response).to have_http_status(:success)
+      expect(response).to redirect_to(:login)
     end
   end
 

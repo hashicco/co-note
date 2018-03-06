@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :require_login, only: [:new, :create]
 
   def new
+    redirect_to :root if current_user
     @user = User.new
   end
 
@@ -16,16 +17,25 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = current_user
+    @user = User.find params[:id]
+    unless @user == current_user
+      redirect_to :root, alert: "invalid access." 
+      return
+    end
   end
 
   def update
-    @user = User.new user_params
-    if @user.save
+    @user = User.find params[:id]
+    unless @user == current_user
+      redirect_to :root, alert: "invalid access." 
+      return
+    end
+
+    if @user.update user_params
       redirect_to(:root, notice: 'User was successfully updated')
     else
       flash.now[:alert] = "Some errors occured"
-      render :new
+      render :edit
     end
   end
 
