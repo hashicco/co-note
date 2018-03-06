@@ -54,7 +54,12 @@ RSpec.describe User, type: :model do
         }.to change{ user01.groups.count }.by(-1)
       end
 
-      it "紐づくGroupUserも同時に削除される"
+      it "紐づくGroupUserも同時に削除される" do
+        expect{
+          user01.groups.first.destroy
+        }.to change{ GroupUser.count }.by(-3)
+      end
+      
     end
   end
 
