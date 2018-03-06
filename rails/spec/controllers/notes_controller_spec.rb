@@ -19,7 +19,7 @@ RSpec.describe NotesController, type: :controller do
   }
 
   let(:invalid_attributes) {
-    {}
+    {title: "123"}
   }
 
   describe "GET #index" do
@@ -113,7 +113,10 @@ RSpec.describe NotesController, type: :controller do
 
   describe "PUT #update" do
     context "非ログイン" do
-      it
+      it do
+        put :update, params: {id: note01.to_param, note: valid_attributes}
+        expect(response).to redirect_to(:login)
+      end
     end
 
     context "User01としてログイン" do
@@ -121,34 +124,46 @@ RSpec.describe NotesController, type: :controller do
         login_user(user01)
         put :update, params: {id: note01.to_param, note: valid_attributes}
         expect{ note01.reload }.to change{ note01.title }.from("hoge").to("hogehoge")
+        expect(response).to redirect_to( note01 )
       end
 
       it
+      #   login_user(user01)
+      #   put :update, params: {id: note01.to_param, note: invalid_attributes}
+      #   expect(response).to be_success
+      # end
+
+      it do
+        login_user(user01)
+        put :update, params: {id: note02.to_param, note: valid_attributes}
+        expect(response).to redirect_to(:notes)
+      end
     end
   end
 
-  #   context "with invalid params" do
-  #     it "returns a success response (i.e. to display the 'edit' template)" do
-  #       note = Note.create! valid_attributes
-  #       put :update, params: {id: note.to_param, note: invalid_attributes}, session: valid_session
-  #       expect(response).to be_success
-  #     end
-  #   end
-  # end
+  describe "DELETE #destroy" do
+    context "非ログイン" do
+      it do
+        delete :destroy, params: {id: note01.to_param}
+        expect(response).to redirect_to(:login)
+      end
+    end
 
-  # describe "DELETE #destroy" do
-  #   it "destroys the requested note" do
-  #     note = Note.create! valid_attributes
-  #     expect {
-  #       delete :destroy, params: {id: note.to_param}, session: valid_session
-  #     }.to change(Note, :count).by(-1)
-  #   end
+    context "User01としてログイン" do
+      it do
+        login_user(user01)
+        expect {
+          delete :destroy, params: {id: note01.to_param}
+        }.to change(Note, :count).by(-1)
+        expect(response).to redirect_to(:notes)
+      end
 
-  #   it "redirects to the notes list" do
-  #     note = Note.create! valid_attributes
-  #     delete :destroy, params: {id: note.to_param}, session: valid_session
-  #     expect(response).to redirect_to(notes_url)
-  #   end
-  # end
+      it do
+        login_user(user01)
+        delete :destroy, params: {id: note02.to_param}
+        expect(response).to redirect_to(:notes)
+      end
+    end
+  end
 
 end
