@@ -1,4 +1,8 @@
 class Note < ApplicationRecord
+  include FriendlyId
+  friendly_id :code
+  before_create ->{ self.code = SecureRandom.hex(10)  }
+
   belongs_to :owner, foreign_key: :owner_user_id, class_name: "User"
   has_many :disclosures, class_name: "NoteDisclosure"
   has_many :disclosed_groups, through: :disclosures, source: :group

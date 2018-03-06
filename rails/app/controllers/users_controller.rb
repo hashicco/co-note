@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find params[:id]
+    @user = User.friendly.find params[:id]
     unless @user == current_user
       redirect_to :root, alert: "invalid access." 
       return
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find params[:id]
+    @user = User.friendly.find params[:id]
     unless @user == current_user
       redirect_to :root, alert: "invalid access." 
       return

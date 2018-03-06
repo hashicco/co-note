@@ -1,4 +1,8 @@
 class Group < ApplicationRecord
+  include FriendlyId
+  friendly_id :code
+  before_create ->{ self.code = SecureRandom.hex(10)  }
+
   belongs_to :owner, foreign_key: :owner_user_id, class_name: "User"
   has_many :group_users
   has_many :including_users, through: :group_users, source: :user

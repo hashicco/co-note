@@ -23,10 +23,12 @@ ActiveRecord::Schema.define(version: 20180228101434) do
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "code", null: false
     t.integer "owner_user_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_groups_on_code", unique: true
     t.index ["owner_user_id"], name: "index_groups_on_owner_user_id"
   end
 
@@ -40,21 +42,25 @@ ActiveRecord::Schema.define(version: 20180228101434) do
   end
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "code", null: false
     t.integer "owner_user_id", null: false
     t.string "title", null: false
-    t.text "text", null: false
+    t.text "text", limit: 4294967295, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_notes_on_code", unique: true
     t.index ["owner_user_id"], name: "index_notes_on_owner_user_id"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "code", null: false
     t.string "name", null: false
     t.string "email", null: false
     t.string "crypted_password"
     t.string "salt"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_users_on_code", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

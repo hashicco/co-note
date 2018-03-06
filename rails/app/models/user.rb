@@ -1,6 +1,10 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
 
+  include FriendlyId
+  friendly_id :code
+  before_create ->{ self.code = SecureRandom.hex(10)  }
+
   has_many :authentications, :dependent => :destroy
   accepts_nested_attributes_for :authentications
 

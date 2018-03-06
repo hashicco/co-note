@@ -74,7 +74,7 @@ class GroupsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
-      @group = Group.find(params[:id])
+      @group = Group.friendly.find(params[:id])
     end
 
     def check_permission_for_read
