@@ -1,5 +1,7 @@
 # CoNote
 
+シンプルなノート共有サービスです。
+
 ## demo site
 
 https://co-note.herokuapp.com
