@@ -1,0 +1,10 @@
+<%= simple_form_for  _group do |f| %>
+  <%= f.input :name %>
+
+  <%= f.simple_fields_for :group_users do |u| %>
+    <%= u.input :user_id, collection: User.without(_group.owner) %>
+  <% end %>
+
+  <%= link_to "back", groups_path, class: "btn"%>
+  <%= f.submit class: ["btn", "btn-primary"] %>
+<% end %>

@@ -1,0 +1,9 @@
+<%= simple_form_for @note, url: disclosures_note_path(@note) do |f| %>
+  
+  <%= f.simple_fields_for :disclosures do |d| %>
+    <%= d.input :group_id, collection: @note.owner.groups %>
+  <% end %>
+
+  <%= link_to "back", note_path(@note), class: "btn"%>
+  <%= f.submit class: ["btn", "btn-primary"] %>
+<% end %>

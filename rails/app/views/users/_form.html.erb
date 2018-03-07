@@ -1,0 +1,9 @@
+<%= simple_form_for _user do |f| %>
+  <%= f.input :name %>
+  <%= f.input :email %>
+  <%= f.input :password %>
+  <%= f.input :password_confirmation %>
+
+  <%= link_to "back", root_path, class: "btn" %>
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

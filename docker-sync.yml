@@ -1,0 +1,8 @@
+version: '2'
+
+syncs:
+  rails_sync:
+    src: './rails'
+    sync_strategy: 'unison'
+    # sync_excludes: ['docker/']
+    # watch_excludes: ['.*/node_modules']

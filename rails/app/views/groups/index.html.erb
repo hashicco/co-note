@@ -1,0 +1,30 @@
+<h1>Groups</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Users</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= group.name %></td>
+        <td><%= group.group_users.map{|group_user| group_user.user.name}.join(", ") %></td>
+
+        <td>
+          <%= link_to 'Show', group, class: ["btn", "btn-sm", "btn-primary"] %>
+          <%= link_to 'Edit', edit_group_path(group), class: ["btn", "btn-sm", "btn-info"] %>
+          <%= link_to 'Destroy', group, method: :delete, data: { confirm: 'Are you sure?' }, class: ["btn", "btn-sm", "btn-danger"]  %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Group', new_group_path, class: "btn btn-primary" %>

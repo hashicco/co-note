@@ -1,0 +1,7 @@
+<%= simple_form_for _note do |f| %>
+  <%= f.input :title %>
+  <%= f.input :text, as: :text, input_html: {rows: 15, class: "markdown-edit"} %>
+
+  <%= link_to "back", notes_path, class: "btn"%>
+  <%= f.submit class: ["btn", "btn-primary"] %>
+<% end %>

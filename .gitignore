@@ -1,0 +1,16 @@
+.docker-sync
+.env
+memo.md
+
+/rails/.bundle
+/rails/vendor/bundle/*
+/rails/log/*
+/rails/tmp/*
+!/rails/log/.keep
+!/rails/tmp/.keep
+
+/rails/node_modules
+/rails/yarn-error.log
+
+/rails/.byebug_history
+
